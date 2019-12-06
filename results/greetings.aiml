@@ -1,0 +1,36 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+	
+<category>
+	<pattern>OI</pattern>
+	<template>
+		<srai>
+			INITIAL_OPTIONS
+		</srai>
+		Hi!
+	</template>
+	</category>
+	
+<category>
+	<pattern>BOM DIA</pattern>
+	<template>
+		<srai>
+			INITIAL_OPTIONS
+		</srai>
+		Hi!
+	</template>
+	</category>
+
+	
+<category>
+	<pattern>INITIAL_OPTIONS</pattern>
+	<template>
+		<oob>
+			y<choices><choice><value>button1</value></choice><choice><value>button2</value></choice></choices>
+		</oob>
+
+	</template>
+	</category>
+
+</aiml>

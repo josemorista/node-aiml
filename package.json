@@ -1,0 +1,12 @@
+{
+  "name": "node-aiml-cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "compile": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
