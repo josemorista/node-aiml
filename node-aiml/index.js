@@ -12,7 +12,7 @@ const generateTemplate = template => {
 const generatePatterns = (patterns, template) => {
   let code = ``
   patterns.forEach(pattern => {
-    code += `\t\n<category>\n\t<pattern>${pattern}</pattern>\n\t<template>\n${generateTemplate(template)}\n\t</template>\n\t</category>\n`
+    code += `\t\n<category>\n\t<pattern>${pattern}</pattern>\n\t<template>\n${template}\n\t</template>\n\t</category>\n`
   })
   return code
 }

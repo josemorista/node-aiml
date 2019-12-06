@@ -3,7 +3,7 @@
 <aiml version="2.0">
 	
 <category>
-	<pattern>OI</pattern>
+	<pattern>Oi</pattern>
 	<template>
 		<srai>
 			INITIAL_OPTIONS
@@ -13,7 +13,7 @@
 	</category>
 	
 <category>
-	<pattern>BOM DIA</pattern>
+	<pattern>Bom dia</pattern>
 	<template>
 		<srai>
 			INITIAL_OPTIONS
@@ -27,7 +27,7 @@
 	<pattern>INITIAL_OPTIONS</pattern>
 	<template>
 		<oob>
-			y<choices><choice><value>button1</value></choice><choice><value>button2</value></choice></choices>
+				<choices><choice><value>button1</value></choice><choice><value>button2</value></choice></choices>
 		</oob>
 
 	</template>
