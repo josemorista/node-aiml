@@ -1,11 +1,15 @@
 const generateTemplate = template => {
   let code = ``
   Object.keys(template).forEach(key => {
-    if (key !== 'msg') {
+    if (key !== 'msg' && key != 'set') {
       code += `\t\t<${key}>\n\t\t\t${template[key]}\n\t\t</${key}>\n`
     }
   })
-  if (template.msg) code += `\t\t${template.msg}`
+  if (template.msg) code += `\t\t${template.msg}\n`
+  if (template.set)
+    code += `\t\t<set ${template.set.name ? `name="${template.set.name}"` : ''}>\n\t\t\t${
+      template.set.value
+    }\n\t\t</set>`
   return code
 }
 

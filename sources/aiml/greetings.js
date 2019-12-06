@@ -8,7 +8,11 @@ ${patterns(
   greetingsSmallTalks,
   template({
     srai: 'INITIAL_OPTIONS',
-    msg: 'Hi!'
+    msg: 'Hi!',
+    set: {
+      name: 'topic',
+      value: 'greeting'
+    }
   })
 )}
 ${pattern(

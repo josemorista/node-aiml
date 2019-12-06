@@ -9,6 +9,9 @@
 			INITIAL_OPTIONS
 		</srai>
 		Hi!
+		<set name="topic">
+			greeting
+		</set>
 	</template>
 	</category>
 	
@@ -19,6 +22,9 @@
 			INITIAL_OPTIONS
 		</srai>
 		Hi!
+		<set name="topic">
+			greeting
+		</set>
 	</template>
 	</category>
 
