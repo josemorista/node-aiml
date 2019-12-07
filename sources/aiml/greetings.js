@@ -13,25 +13,31 @@ module.exports = aiml(
         pattern(
           smallTalk.pattern,
           template([
-            srai(`INITIAL_OPTIONS${smallTalk.entity ? `<star index="${smallTalk.entity}" />` : ''}`)
+            srai(
+              `INITIAL_OPTIONS${
+                smallTalk.entityAt !== null || smallTalk.entityAt !== undefined
+                  ? `<star index="${smallTalk.entityAt}" />`
+                  : ''
+              }`
+            )
           ])
         )
       )
-      .join(''),
+      .join('\n'),
     pattern(
       'INITIAL_OPTIONS *',
       template([
         think([
           set(
             {
-              name: 'entity'
+              var: 'entity'
             },
             '<star />'
           )
         ]),
         condition(
           {
-            var: 'count'
+            var: 'entity'
           },
           [
             morningEntities

@@ -16,7 +16,7 @@ const generatePatterns = (patterns, template) =>
 const generatePattern = (pattern, template) => generatePatterns([pattern], template)
 
 const generateAiml = ({ version, encoding }, tags) =>
-  `<?xml version="${version}" encoding="${encoding}"?>\n<aiml version="2.0">\n${tags.join(
+  `<?xml version="1.0" encoding="${encoding}"?>\n<aiml version="${version}">\n${tags.join(
     '\n'
   )}\n</aiml>`
 
