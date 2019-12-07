@@ -1,25 +1,52 @@
 const greetingsSmallTalks = require('../smallTalks/greetings')
-const { patterns, choices, pattern, template } = require('../../node-aiml')
+const morningEntities = require('../entities/morning')
+const { aiml, pattern, template, set, condition, srai, think, li } = require('../../node-aiml')
 
-module.exports = `
-<?xml version="1.0" encoding="UTF-8"?>
-<aiml version="2.0">
-${patterns(
-  greetingsSmallTalks,
-  template({
-    srai: 'INITIAL_OPTIONS',
-    msg: 'Hi!',
-    set: {
-      name: 'topic',
-      value: 'greeting'
-    }
-  })
-)}
-${pattern(
-  'INITIAL_OPTIONS',
-  template({
-    oob: choices(['button1', 'button2'])
-  })
-)}
-</aiml>
-`
+module.exports = aiml(
+  {
+    version: '2.0',
+    encoding: 'UTF-8'
+  },
+  [
+    greetingsSmallTalks
+      .map(smallTalk =>
+        pattern(
+          smallTalk.pattern,
+          template([
+            srai(`INITIAL_OPTIONS${smallTalk.entity ? `<star index="${smallTalk.entity}" />` : ''}`)
+          ])
+        )
+      )
+      .join(''),
+    pattern(
+      'INITIAL_OPTIONS *',
+      template([
+        think([
+          set(
+            {
+              name: 'entity'
+            },
+            '<star />'
+          )
+        ]),
+        condition(
+          {
+            var: 'count'
+          },
+          [
+            morningEntities
+              .map(entity =>
+                li(
+                  {
+                    value: entity
+                  },
+                  `Bom dia!`
+                )
+              )
+              .join('')
+          ]
+        )
+      ])
+    )
+  ]
+)

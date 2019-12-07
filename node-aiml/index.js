@@ -1,41 +1,34 @@
-const generateTemplate = template => {
-  let code = ``
-  Object.keys(template).forEach(key => {
-    if (key !== 'msg' && key != 'set') {
-      code += `\t\t<${key}>\n\t\t\t${template[key]}\n\t\t</${key}>\n`
-    }
-  })
-  if (template.msg) code += `\t\t${template.msg}\n`
-  if (template.set)
-    code += `\t\t<set ${template.set.name ? `name="${template.set.name}"` : ''}>\n\t\t\t${
-      template.set.value
-    }\n\t\t</set>`
-  return code
-}
+const generateMultipleValueTag = (key, props = {}, values = []) =>
+  `<${key} ${Object.keys(props)
+    .map(key => `${key}="${props[key]}"`)
+    .join(' ')}>${values.join('')}</${key}>`
 
-const generatePatterns = (patterns, template) => {
-  let code = ``
-  patterns.forEach(pattern => {
-    code += `\t\n<category>\n\t<pattern>${pattern}</pattern>\n\t<template>\n${template}\n\t</template>\n\t</category>\n`
-  })
-  return code
-}
+const generateSingleValueTag = (key, props, value) =>
+  `<${key} ${Object.keys(props)
+    .map(key => `${key}="${props[key]}"`)
+    .join(' ')}>${value}</${key}>`
 
-const generatePattern = (pattern, template) => {
-  return generatePatterns([pattern], template)
-}
+const generatePatterns = (patterns, template) =>
+  patterns
+    .map(pattern => `<category><pattern>${pattern}</pattern>${template}</category>`)
+    .join('\n')
 
-const generateChoices = choices => {
-  let code = ``
-  choices.forEach(choice => {
-    code += `<choice><value>${choice}</value></choice>`
-  })
-  return `\t<choices>${code}</choices>`
-}
+const generatePattern = (pattern, template) => generatePatterns([pattern], template)
+
+const generateAiml = ({ version, encoding }, tags) =>
+  `<?xml version="${version}" encoding="${encoding}"?>\n<aiml version="2.0">\n${tags.join(
+    '\n'
+  )}\n</aiml>`
 
 module.exports = {
-  template: generateTemplate,
+  aiml: generateAiml,
+  template: tags => generateMultipleValueTag('template', {}, tags),
   patterns: generatePatterns,
   pattern: generatePattern,
-  choices: generateChoices
+  choices: choices => generateMultipleValueTag('choices', {}, choices),
+  set: (props, value) => generateSingleValueTag('set', props, value),
+  srai: value => generateSingleValueTag('srai', {}, value),
+  condition: (props, tags) => generateMultipleValueTag('condition', props, tags),
+  li: (props, value) => generateSingleValueTag('li', props, value),
+  think: tags => generateMultipleValueTag('think', {}, tags)
 }

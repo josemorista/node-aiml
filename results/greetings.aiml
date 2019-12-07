@@ -1,42 +1,5 @@
-
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="2.0" encoding="UTF-8"?>
 <aiml version="2.0">
-	
-<category>
-	<pattern>Oi</pattern>
-	<template>
-		<srai>
-			INITIAL_OPTIONS
-		</srai>
-		Hi!
-		<set name="topic">
-			greeting
-		</set>
-	</template>
-	</category>
-	
-<category>
-	<pattern>Bom dia</pattern>
-	<template>
-		<srai>
-			INITIAL_OPTIONS
-		</srai>
-		Hi!
-		<set name="topic">
-			greeting
-		</set>
-	</template>
-	</category>
-
-	
-<category>
-	<pattern>INITIAL_OPTIONS</pattern>
-	<template>
-		<oob>
-				<choices><choice><value>button1</value></choice><choice><value>button2</value></choice></choices>
-		</oob>
-
-	</template>
-	</category>
-
+<category><pattern>OI, *</pattern><template ><srai >INITIAL_OPTIONS</srai></template></category>
+<category><pattern>INITIAL_OPTIONS *</pattern><template ><think ><set name="entity"><star /></set></think><condition var="count"><li value="ACORDEI AGORA">Bom dia!</li><li value="BOM DIA">Bom dia!</li></condition></template></category>
 </aiml>

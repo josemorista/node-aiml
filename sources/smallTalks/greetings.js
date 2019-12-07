@@ -1,1 +1,6 @@
-module.exports = ['Oi', 'Bom dia']
+module.exports = [
+  {
+    pattern: 'OI, *',
+    entity: 0
+  }
+]
