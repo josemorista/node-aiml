@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <aiml version="2.0">
 
-<category><pattern>OI *</pattern><template><srai>INITIAL_ACTION <lowercase><star index="1" /><lowercase/></template></category>
-<category><pattern>OLÁ * estou *</pattern><template><srai>INITIAL_ACTION <lowercase><star index="2" /><lowercase/></template></category>
-<category><pattern>INITIAL_ACTION *<pattern>
+<category><pattern>OI *</pattern><template><srai>INITIAL_ACTION <lowercase><star index="1" /></lowercase></srai></template></category>
+<category><pattern>OLÁ * estou *</pattern><template><srai>INITIAL_ACTION <lowercase><star index="2" /></lowercase></srai></template></category>
+<category><pattern>INITIAL_ACTION *</pattern>
 <template>
 <think>
 <set var="entity"><star/></set>
