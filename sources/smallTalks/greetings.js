@@ -1,6 +1,6 @@
 module.exports = [
   {
     pattern: 'OI, *',
-    entityAt: 0
+    entityAt: 1
   }
 ]

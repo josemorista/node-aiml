@@ -16,7 +16,7 @@ module.exports = aiml(
             srai(
               `INITIAL_OPTIONS${
                 smallTalk.entityAt !== null || smallTalk.entityAt !== undefined
-                  ? `<star index="${smallTalk.entityAt}" />`
+                  ? ` <star index="${smallTalk.entityAt}" />`
                   : ''
               }`
             )
