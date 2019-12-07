@@ -1,34 +1,62 @@
-const generateMultipleValueTag = (key, props = {}, values = []) =>
-  `<${key} ${Object.keys(props)
-    .map(key => `${key}="${props[key]}"`)
-    .join(' ')}>${values.join('')}</${key}>`
+const getEntityIndex = intent => {
+  const index = intent.indexOf('{{entity}}')
+  let count = 1
+  for (let i = 0; i < index; i++) {
+    if (intent[i] === '*' || intent[i] === '#' || intent[i] === '_') count++
+  }
+  return count
+}
 
-const generateSingleValueTag = (key, props, value) =>
-  `<${key} ${Object.keys(props)
-    .map(key => `${key}="${props[key]}"`)
-    .join(' ')}>${value}</${key}>`
+mapEntities = ({ entities = [], response = `` }) => {
+  return `<condition var="entity">\n${entities
+    .map(entity => `<li value="${entity.toLowerCase()}">${response}</li>`)
+    .join('\n')}\n</condition>`
+}
 
-const generatePatterns = (patterns, template) =>
-  patterns
-    .map(pattern => `<category><pattern>${pattern}</pattern>${template}</category>`)
-    .join('\n')
+module.exports = class AIML {
+  constructor(version = '2.0', encoding = 'UTF-8') {
+    this.version = version
+    this.encoding = encoding
+    this.src = ''
+  }
 
-const generatePattern = (pattern, template) => generatePatterns([pattern], template)
+  addIntentsToAction(intents, action) {
+    this.src += '\n'
+    this.src += intents
+      .map(
+        intent =>
+          `<category><pattern>${intent.replace(
+            `{{entity}}`,
+            '*'
+          )}</pattern><template><srai>${action.toUpperCase()} <lowercase><star index="${getEntityIndex(
+            intent
+          )}" /><lowercase/></template></category>`
+      )
+      .join('\n')
+  }
 
-const generateAiml = ({ version, encoding }, tags) =>
-  `<?xml version="1.0" encoding="${encoding}"?>\n<aiml version="${version}">\n${tags.join(
-    '\n'
-  )}\n</aiml>`
+  addAction(action, entities = []) {
+    this.src += '\n'
+    if (entities.length === 0) {
+      this.src = `<category><pattern>${action.toUpperCase()}<pattern><template></template></category>`
+    } else {
+      this.src += entities
+        .map(
+          entity =>
+            `<category><pattern>${action.toUpperCase()} *<pattern>\n<template>\n<think>\n<set var="entity"><star/></set>\n</think>\n${mapEntities(
+              entity
+            )}\n</template>\n</category>`
+        )
+        .join('\n')
+    }
+  }
 
-module.exports = {
-  aiml: generateAiml,
-  template: tags => generateMultipleValueTag('template', {}, tags),
-  patterns: generatePatterns,
-  pattern: generatePattern,
-  choices: choices => generateMultipleValueTag('choices', {}, choices),
-  set: (props, value) => generateSingleValueTag('set', props, value),
-  srai: value => generateSingleValueTag('srai', {}, value),
-  condition: (props, tags) => generateMultipleValueTag('condition', props, tags),
-  li: (props, value) => generateSingleValueTag('li', props, value),
-  think: tags => generateMultipleValueTag('think', {}, tags)
+  addCode(code = ``) {
+    this.src += '\n'
+    this.src += code
+  }
+
+  compile() {
+    return `<?xml version="1.0" encoding="${this.encoding}"?>\n<aiml version="${this.version}">\n${this.src}\n</aiml>`
+  }
 }

@@ -1,1 +1,1 @@
-module.exports = ['ACORDEI AGORA', 'BOM DIA']
+module.exports = ['ACORDEI AGORA', 'BOM DIA', 'ACORDANDO']
