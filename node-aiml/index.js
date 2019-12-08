@@ -28,22 +28,22 @@ module.exports = class AIML {
           `<category><pattern>${intent.replace(
             `{{entity}}`,
             '*'
-          )}</pattern><template><srai>${action.toUpperCase()}</srai> <lowercase><star index="${getEntityIndex(
+          )}</pattern><template><srai>${action.toUpperCase()} <lowercase><star index="${getEntityIndex(
             intent
-          )}" /></lowercase></template></category>`
+          )}" /></lowercase></srai></template></category>`
       )
       .join('\n')
   }
 
-  addAction(action, entities = []) {
+  addAction(action, entities = [], response = '') {
     this.src += '\n'
     if (entities.length === 0) {
-      this.src = `<category><pattern>${action.toUpperCase()}<pattern><template></template></category>`
+      this.src = `<category><pattern>${action.toUpperCase()}</pattern><template>${response}</template></category>`
     } else {
       this.src += entities
         .map(
           entity =>
-            `<category><pattern>${action.toUpperCase()} *<pattern>\n<template>\n<think>\n<set var="entity"><star/></set>\n</think>\n${mapEntities(
+            `<category><pattern>${action.toUpperCase()} *</pattern>\n<template>\n<think>\n<set var="entity"><star/></set>\n</think>\n${mapEntities(
               entity
             )}\n</template>\n</category>`
         )
