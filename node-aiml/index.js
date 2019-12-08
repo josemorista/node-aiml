@@ -28,9 +28,9 @@ module.exports = class AIML {
           `<category><pattern>${intent.replace(
             `{{entity}}`,
             '*'
-          )}</pattern><template><srai>${action.toUpperCase()} <lowercase><star index="${getEntityIndex(
+          )}</pattern><template><srai>${action.toUpperCase()}</srai> <lowercase><star index="${getEntityIndex(
             intent
-          )}" /><lowercase/></template></category>`
+          )}" /></lowercase></template></category>`
       )
       .join('\n')
   }
