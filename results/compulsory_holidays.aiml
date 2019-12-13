@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+<category><pattern>O QUE E *</pattern><template><srai>TYPE_DOUBTS</srai> <lowercase><star index="1" /></lowercase></template></category>
+<category><pattern>O QUE É *</pattern><template><srai>TYPE_DOUBTS</srai> <lowercase><star index="1" /></lowercase></template></category>
+<category><pattern>COMO FUNCIONA *</pattern><template><srai>TYPE_DOUBTS</srai> <lowercase><star index="1" /></lowercase></template></category>
+<category><pattern>* CONSEGUE ME EXPLICAR O QUE E *</pattern><template><srai>TYPE_DOUBTS</srai> <lowercase><star index="2" /></lowercase></template></category>
+<category><pattern>* CONSEGUE ME EXPLICAR O QUE É *</pattern><template><srai>TYPE_DOUBTS</srai> <lowercase><star index="2" /></lowercase></template></category>
+<category><pattern>EU QUERO MAIS INFORMAÇÕES SOBRE *</pattern><template><srai>TYPE_DOUBTS</srai> <lowercase><star index="1" /></lowercase></template></category>
+<category><pattern>EU QUERO MAIS INFORMACOES SOBRE *</pattern><template><srai>TYPE_DOUBTS</srai> <lowercase><star index="1" /></lowercase></template></category>
+<category><pattern>QUERO SABER MAIS SOBRE *</pattern><template><srai>TYPE_DOUBTS</srai> <lowercase><star index="1" /></lowercase></template></category>
+<category><pattern>QUAIS AS FUNÇÕES DE *</pattern><template><srai>TYPE_DOUBTS</srai> <lowercase><star index="1" /></lowercase></template></category>
+<category><pattern>QUAIS AS FUNCOES DE *</pattern><template><srai>TYPE_DOUBTS</srai> <lowercase><star index="1" /></lowercase></template></category>
+<category><pattern>QUAL O SIGNIFICADO * *</pattern><template><srai>TYPE_DOUBTS</srai> <lowercase><star index="2" /></lowercase></template></category>
+<category><pattern>VOCÊ PODE ME EXPLICAR *</pattern><template><srai>TYPE_DOUBTS</srai> <lowercase><star index="1" /></lowercase></template></category>
+<category><pattern>VOCE PODE ME EXPLICAR *</pattern><template><srai>TYPE_DOUBTS</srai> <lowercase><star index="1" /></lowercase></template></category>
+<category><pattern>EU QUERO SABER SOBRE *</pattern><template><srai>TYPE_DOUBTS</srai> <lowercase><star index="1" /></lowercase></template></category>
+<category><pattern>QUAL É A FUNÇÃO * *</pattern><template><srai>TYPE_DOUBTS</srai> <lowercase><star index="2" /></lowercase></template></category>
+<category><pattern>QUAL É A FUNCAO * *</pattern><template><srai>TYPE_DOUBTS</srai> <lowercase><star index="2" /></lowercase></template></category>
+<category><pattern>O QUE SIGNIFICA *</pattern><template><srai>TYPE_DOUBTS</srai> <lowercase><star index="1" /></lowercase></template></category>
+<category><pattern>PARA QUE SERVER *</pattern><template><srai>TYPE_DOUBTS</srai> <lowercase><star index="1" /></lowercase></template></category>
+<category><pattern>* PODE ME EXPLICAR SOBRE *</pattern><template><srai>TYPE_DOUBTS</srai> <lowercase><star index="2" /></lowercase></template></category>
+<category><pattern>PARA QUE SERVEM AS *</pattern><template><srai>TYPE_DOUBTS</srai> <lowercase><star index="1" /></lowercase></template></category>
+<category><pattern>TYPE_DOUBTS *<pattern>
+<template>
+<think>
+<set var="entity"><star/></set>
+</think>
+<condition var="entity">
+<li value="ferias compulsorias">Período compulsório é o período que antecede o vencimento do 2° período aquisitivo de férias. Então olha só, as férias compulsórias deverão ser gozadas antes do vencimento do 2º período aquisitivo e é prática da BASF enviar 2 e-mails de notificações, um com 120 dias e outro com 90 dias de antecedência. Caso o colaborador não realize a programação dentro de 30 dias após o recebimento da última notificação, o sistema realiza uma programação automática do período de gozo. Dica: melhor ficar sempre de olho e se programar, ok?</li>
+<li value="férias compulsórias">Período compulsório é o período que antecede o vencimento do 2° período aquisitivo de férias. Então olha só, as férias compulsórias deverão ser gozadas antes do vencimento do 2º período aquisitivo e é prática da BASF enviar 2 e-mails de notificações, um com 120 dias e outro com 90 dias de antecedência. Caso o colaborador não realize a programação dentro de 30 dias após o recebimento da última notificação, o sistema realiza uma programação automática do período de gozo. Dica: melhor ficar sempre de olho e se programar, ok?</li>
+</condition>
+</template>
+</category>
+</aiml>
