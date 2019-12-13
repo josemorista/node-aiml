@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <aiml version="2.0">
 
-<category><pattern>OI *</pattern><template><srai>INITIAL_ACTION</srai> <lowercase><star index="1" /></lowercase></template></category>
-<category><pattern>OLÁ * estou *</pattern><template><srai>INITIAL_ACTION</srai> <lowercase><star index="2" /></lowercase></template></category>
-<category><pattern>INITIAL_ACTION *<pattern>
-<template>
-<think>
-<set var="entity"><star/></set>
-</think>
-<condition var="entity">
-<li value="acordei agora">Bom dia!</li>
-<li value="bom dia">Bom dia!</li>
-<li value="acordando">Bom dia!</li>
-</condition>
-</template>
-</category>
+
+<category><pattern>OI ACORDEI AGORA</pattern><template><srai>INITIAL_ACTION 0</srai></template></category>
+<category><pattern>OI BOM DIA</pattern><template><srai>INITIAL_ACTION 0</srai></template></category>
+<category><pattern>OI ACORDANDO</pattern><template><srai>INITIAL_ACTION 0</srai></template></category>
+<category><pattern>OLÁ * ESTOU ACORDEI AGORA</pattern><template><srai>INITIAL_ACTION 0</srai></template></category>
+<category><pattern>OLÁ * ESTOU BOM DIA</pattern><template><srai>INITIAL_ACTION 0</srai></template></category>
+<category><pattern>OLÁ * ESTOU ACORDANDO</pattern><template><srai>INITIAL_ACTION 0</srai></template></category>
+<category><pattern>INITIAL_ACTION 0</pattern><template>Bom dia!
+</template></category>
+
 </aiml>

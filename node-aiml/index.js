@@ -84,7 +84,7 @@ const generateVariations = (variation, wildCards) => {
   newSamples = [...newSamples, ...(wildCards ? wildCardsVariations(variation) : [variation])]
   let splt = str.split(' ')
   splt.forEach(word => {
-    if (word[word.length - 1] === 's') {
+    if (word.length > 1 && word[word.length - 1] === 's') {
       let index = variation.indexOf(word)
       processed = setCharAt(variation, index + word.length - 1, 'z')
       newSamples = [...newSamples, ...(wildCards ? wildCardsVariations(processed) : [processed])]
@@ -167,8 +167,8 @@ module.exports = class AIML {
 
   addIntentsToAction(intents, action) {
     this.intents[action] = {
-      intents: this.intents[action] ? [...intents, this.intents[action].intents] : Array.isArray(intents) ? intents : [intents],
-      initialIndex: this.intents[action] ? this.intents[action].initialIndex : 0
+      intents: this.intents[action] && this.intents[action].intents ? [...intents, this.intents[action].intents] : Array.isArray(intents) ? intents : [intents],
+      initialIndex: this.intents[action] && this.intents[action].initialIndex ? this.intents[action].initialIndex : 0
     }
   }
 
@@ -187,25 +187,33 @@ module.exports = class AIML {
       this.intents[action].intents.forEach(intent => {
         entities.forEach((e, index) => {
           e.entities.forEach(entity => {
-            this.src += `\n<category><pattern>${intent.replace('{{entity}}', entity).toUpperCase()}</pattern><template><srai>${action.toUpperCase()} ${this.intents[action].initialIindex +
+            this.src += `\n<category><pattern>${intent.replace('{{entity}}', entity).toUpperCase()}</pattern><template><srai>${action.toUpperCase()} ${this.intents[action].initialIndex +
               index}</srai></template></category>`
           })
         })
       })
       entities.forEach((e, index) => {
-        this.src += `\n<category><pattern>${action.toUpperCase()} ${this.intents[action].initialIindex + index}</pattern><template>${mapContext(e.setContext || setContext)}${mapResponses(
+        this.src += `\n<category><pattern>${action.toUpperCase()} ${this.intents[action].initialIndex + index}</pattern><template>${mapContext(e.setContext || setContext)}${mapResponses(
           e.response,
           e.buttons
         )}\n${response ? mapResponses(response, buttons) : ''}</template></category>`
       })
       this.intents[action].initialIndex += entities.length
     } else {
-      if (this.intents[action]) {
-        this.intents[action].intents.forEach(intent => {
-          this.src += `\n<category><pattern>${intent.toUpperCase()}</pattern><template><srai>${action.toUpperCase()}</srai></template></category>`
-        })
+      if (!this.intents[action]) {
+        this.addIntentsToAction(['{{entity}}'], action)
       }
-      this.src += `\n<category><pattern>${action.toUpperCase()}</pattern><template>${mapContext(setContext)}${mapResponses(response, buttons)}</template></category>`
+      if (!this.intents[action]) {
+        this.addIntentsToAction([action], action)
+      }
+      this.intents[action].intents.forEach(intent => {
+        this.src += `\n<category><pattern>${intent.toUpperCase()}</pattern><template><srai>${action.toUpperCase()} ${this.intents[action].initialIndex}</srai></template></category>`
+      })
+      this.src += `\n<category><pattern>${action.toUpperCase()} ${this.intents[action].initialIndex}</pattern><template>${mapContext(setContext)}${mapResponses(
+        response,
+        buttons
+      )}</template></category>`
+      this.intents[action].initialIndex += 1
     }
     this.src += `${context ? `</topic>\n` : '\n'}`
   }
