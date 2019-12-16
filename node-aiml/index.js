@@ -201,9 +201,6 @@ module.exports = class AIML {
       this.intents[action].initialIndex += entities.length
     } else {
       if (!this.intents[action]) {
-        this.addIntentsToAction(['{{entity}}'], action)
-      }
-      if (!this.intents[action]) {
         this.addIntentsToAction([action], action)
       }
       this.intents[action].intents.forEach(intent => {
