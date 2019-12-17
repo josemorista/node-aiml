@@ -58,10 +58,12 @@ const removeOneAccentOrSpecialChar = strAccent => {
   return str.join('')
 }
 
-const wildCardsVariations = element => {
-  let newSamples = []
-  newSamples.push(`^ ${element} ^`)
-  return newSamples
+const wildCardsVariation = (element, wildCardHighPriority) => {
+  let wildCard = '^'
+  if (wildCardHighPriority) {
+    wildCard = '#'
+  }
+  return `${wildCard} ${element} ${wildCard}`
 }
 
 const removeDuplicates = v => {
@@ -77,67 +79,69 @@ const mapContext = context => {
   return `<think><set name="topic">${context.toUpperCase()}</set></think>`
 }
 
-const generateVariations = (variation, wildCards) => {
+const generateVariations = (variation, options = {}) => {
   let newSamples = []
   let processed = variation
   let str = variation
-  newSamples = [...newSamples, ...(wildCards ? wildCardsVariations(variation) : [variation])]
+  newSamples.push(options.wildCard ? wildCardsVariation(variation, options.wildCardHighPriority) : variation)
   let splt = str.split(' ')
   splt.forEach(word => {
-    if (word.length > 1 && word[word.length - 1] === 's') {
+    if (options.plurals && word.length > 1 && word[word.length - 1] === 's') {
       let index = variation.indexOf(word)
       processed = setCharAt(variation, index + word.length - 1, 'z')
-      newSamples = [...newSamples, ...(wildCards ? wildCardsVariations(processed) : [processed])]
+      newSamples.push(options.wildCard ? wildCardsVariation(processed, options.wildCardHighPriority) : processed)
       processed = setCharAt(variation, index + word.length - 1, '')
-      newSamples = [...newSamples, ...(wildCards ? wildCardsVariations(processed) : [processed])]
+      newSamples.push(options.wildCard ? wildCardsVariation(processed, options.wildCardHighPriority) : processed)
     }
     let z = word.indexOf('z')
     let cs = word.indexOf('ç')
     let ss = word.indexOf('ss')
 
-    if (ss !== -1 && ss !== 0) {
+    if (options.ss && ss !== -1 && ss !== 0) {
       let index = variation.indexOf(word)
       processed = setCharAt(variation, index + ss, 'ç')
       processed = setCharAt(variation, index + ss + 1, '')
-      newSamples = [...newSamples, ...(wildCards ? wildCardsVariations(processed) : [processed])]
+      newSamples.push(options.wildCard ? wildCardsVariation(processed, options.wildCardHighPriority) : processed)
       processed = setCharAt(variation, index + ss, 's')
-      newSamples = [...newSamples, ...(wildCards ? wildCardsVariations(processed) : [processed])]
+      newSamples.push(options.wildCard ? wildCardsVariation(processed, options.wildCardHighPriority) : processed)
     } else {
       let s = word.indexOf('s')
-      if (s !== -1 && s !== 0 && s !== word.length - 1 && ['a', 'e', 'i', 'o', 'u'].includes(word[s + 1])) {
+      if (options.s && s !== -1 && s !== 0 && s !== word.length - 1 && ['a', 'e', 'i', 'o', 'u'].includes(word[s + 1])) {
         let index = variation.indexOf(word)
         processed = setCharAt(variation, index + s, 'ç')
-        newSamples = [...newSamples, ...(wildCards ? wildCardsVariations(processed) : [processed])]
+        newSamples.push(options.wildCard ? wildCardsVariation(processed, options.wildCardHighPriority) : processed)
         processed = `${variation.slice(0, index + s)}s${variation.slice(index + s, variation.length)}`
-        newSamples = [...newSamples, ...(wildCards ? wildCardsVariations(processed) : [processed])]
+        newSamples.push(options.wildCard ? wildCardsVariation(processed, options.wildCardHighPriority) : processed)
       }
     }
-    if (cs !== -1 && cs !== 0 && cs !== word.length - 1 && ['a', 'e', 'i', 'o', 'u'].includes(word[cs + 1])) {
+    if (options.cs && cs !== -1 && cs !== 0 && cs !== word.length - 1 && ['a', 'e', 'i', 'o', 'u'].includes(word[cs + 1])) {
       let index = variation.indexOf(word)
       processed = setCharAt(variation, index + cs, 's')
-      newSamples = [...newSamples, ...(wildCards ? wildCardsVariations(processed) : [processed])]
+      newSamples.push(options.wildCard ? wildCardsVariation(processed, options.wildCardHighPriority) : processed)
       processed = setCharAt(variation, index + cs, 'c')
-      newSamples = [...newSamples, ...(wildCards ? wildCardsVariations(processed) : [processed])]
+      newSamples.push(options.wildCard ? wildCardsVariation(processed, options.wildCardHighPriority) : processed)
     }
-    if (z !== -1 && z !== 0) {
+    if (options.z && z !== -1 && z !== 0) {
       let index = variation.indexOf(word)
       processed = setCharAt(variation, index + z, 's')
-      newSamples = [...newSamples, ...(wildCards ? wildCardsVariations(processed) : [processed])]
+      newSamples.push(options.wildCard ? wildCardsVariation(processed, options.wildCardHighPriority) : processed)
     }
 
-    let hasNumber = searchForNumber(word)
-    if (hasNumber !== null) {
-      let toText = hasNumber.isOrdinal ? ordinal(hasNumber.number) : cardinal(hasNumber.number)
-      if (toText) {
-        processed = processed.replace(word, toText)
-        newSamples = [...newSamples, ...(wildCards ? wildCardsVariations(processed) : [processed])]
+    if (options.numbers) {
+      let hasNumber = searchForNumber(word)
+      if (hasNumber !== null) {
+        let toText = hasNumber.isOrdinal ? ordinal(hasNumber.number) : cardinal(hasNumber.number)
+        if (toText) {
+          processed = processed.replace(word, toText)
+          newSamples.push(options.wildCard ? wildCardsVariation(processed, options.wildCardHighPriority) : processed)
+        }
       }
     }
   })
   while (true) {
     processed = removeOneAccentOrSpecialChar(str)
     if (str !== processed) {
-      newSamples = [...newSamples, ...(wildCards ? wildCardsVariations(processed) : [processed])]
+      newSamples.push(options.wildCard ? wildCardsVariation(processed, options.wildCardHighPriority) : processed)
       str = processed
     } else {
       break
@@ -154,12 +158,15 @@ module.exports = class AIML {
     this.src = ''
   }
 
-  static generateSamplesVariations(samples = [], wildCards = true) {
+  static generateSamplesVariations(samples = [], options = {}) {
     let newSamples = []
+    let initialOptions = { z: true, ss: true, s: true, cs: true, plurals: true, wildCard: true, wildCardHighPriority: false, numbers: true }
     samples.forEach(sample => {
-      let variations = generateVariations(sample.toLowerCase(), wildCards)
+      let myOptions = { ...initialOptions, ...options }
+      let variations = generateVariations(sample.toLowerCase(), myOptions)
       variations.forEach(variation => {
-        newSamples = [...newSamples, ...generateVariations(variation, false)]
+        myOptions.wildCard = false
+        newSamples = [...newSamples, ...generateVariations(variation, myOptions)]
       })
     })
     return removeDuplicates(newSamples)
